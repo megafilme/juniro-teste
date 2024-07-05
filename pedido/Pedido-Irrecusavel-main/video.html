@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat&display=swap">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Vídeo</title>
+    <style>
+        .message {
+            position: absolute;
+            font-size: 20px;
+            color: red;
+            opacity: 1;
+            transition: opacity 1s linear, transform 3s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <video id="video" width="250" controls>
+        <source src="WhatsApp Video 2024-07-05 at 14.40.09.mp4" type="video/mp4">
+        Seu navegador não suporta a tag de vídeo.
+    </video>
+
+    <div id="messages"></div>
+
+    <script>
+        window.onload = function() {
+            const audio = new Audio(localStorage.getItem('audioSrc'));
+            audio.currentTime = localStorage.getItem('audioPosition');
+            audio.play();
+
+            // Atualizar a posição do áudio no localStorage conforme ele toca
+            audio.addEventListener('timeupdate', function() {
+                localStorage.setItem('audioPosition', audio.currentTime);
+            });
+
+            const video = document.getElementById('video');
+            video.addEventListener('play', function() {
+                audio.pause();
+                showMessages();
+            });
+        }
+
+        function showMessages() {
+            const messagesContainer = document.getElementById('messages');
+            for (let i = 0; i < 100; i++) {
+                const message = document.createElement('div');
+                message.className = 'message';
+                message.textContent = 'VOCÊ É INCRÍVEL BIA';
+                message.style.top = Math.random() * window.innerHeight + 'px';
+                message.style.left = Math.random() * window.innerWidth + 'px';
+                messagesContainer.appendChild(message);
+
+                // Adicionar delay de exibição
+                (function(msg, delay) {
+                    setTimeout(function() {
+                        msg.style.transform = 'scale(1.5)';
+                        msg.style.opacity = '0';
+                    }, delay);
+                })(message, Math.random() * 180000); // Delay aleatório até 3 minutos
+            }
+
+            // Limpar mensagens após 3 minutos
+            setTimeout(function() {
+                while (messagesContainer.firstChild) {
+                    messagesContainer.removeChild(messagesContainer.firstChild);
+                }
+            }, 180000);
+        }
+    </script>
+</body>
+</html>
